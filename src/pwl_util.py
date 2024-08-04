@@ -1,26 +1,26 @@
 
 import sys
 import re
+import libpwl
 
-class PWLSum:
+class PWLUtil:
     def __init__(self):
         self.m_pwl_filename         = ''
         self.m_find                 = ''
         self.m_pwl_output_filename  = ''
-        self.m_xs           = []
-        self.m_ys_dic       = {}    # key : nodename, data : ys
+        self.m_pwls                 = []
     def PrintUsage(self):
-        print(f'# pwl_sum.py usage:')
-        print(f'% python3 pwl_sum.py pwl_file find_str output_file')
+        print(f'# pwl_util.py usage:')
+        print(f'% python3 pwl_util.py pwl_file find_str output_file')
     def ReadArgs(self, args):
         print(f'# read args start')
         if 4 != len(args):
             self.PrintUsage()
             exit()
         self.m_pwl_filename     = args[1]
-        self.m_find         = args[2]
+        self.m_find             = args[2]
         self.m_pwl_output_filename  = args[3]
-        self.m_recompile    = re.compile(r'{self.m_find}')
+        #self.m_recompile    = re.compile(r'{self.m_find}')
         print(f'# read args end')
     def PrintInputs(self):
         print(f'# print inputs start')
@@ -47,18 +47,11 @@ class PWLSum:
                 if 0 == len(tokens):
                     continue
                 # srcname nodename1 nodename2 pwl t1 v1 t2 v2 ...
-                # add xs
-                if 0 == len(self.m_xs):
-                    for pos in range(4, len(tokens)):
-                        self.m_xs.append(tokens[pos])
-                        pos = pos + 1
-                # add ys
-                if not tokens[1] in self.m_ys_dic:
-                    ys  = []
-                    for pos in len(5, len(tokens)):
-                        ys.append(tokens[pos])
-                        pos = pos + 1
-                    self.m_ys_dic[tokens[1]]    = ys
+                pwl     = libpwl.PWL()
+                pwl.SetName(tokens[0])
+                pwl.SetPosNodename(tokens[1])
+                pwl.SetNegNodename(tokens[2])
+                for pos in range(3, len(tokens), 2):
             f_pwl.close()
         print(f'# read pwl file({self.m_pwl_filename}) end')
     def PrintXs(self):
@@ -80,10 +73,12 @@ class PWLSum:
         self.PrintInputs()
         self.ReadPWL()
         print(f'# pwl_util.py end')
+    def Atof2(self):
 
 def main(args):
-    my_pwl_sum  = PWLSum()
-    my_pwl_sum.Run(args)
+    my_pwl_util  = PWLSum()
+    my_pwl_util.Run(args)
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main(sys.argv):1
+    :1
